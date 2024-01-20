@@ -29,7 +29,7 @@ app.use(Express.urlencoded({ extended: true }))  // parse form data
 // and also required for publishing site
 app.use(Express.static(path.join(__dirname, 'build')))
 
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
 
@@ -91,9 +91,9 @@ app.get("/pending_orders", async (req, res) => {
 })
 
 // error handler
-app.get('*', (req, res) => {
-    res.send('404 not found from server')
-})
+// app.get('*', (req, res) => {
+//     res.send('404 not found from server')
+// })
 
 
 
