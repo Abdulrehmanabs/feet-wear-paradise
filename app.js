@@ -2,15 +2,11 @@
 let Express = require('express');
 let app = Express();
 const cors = require("cors");
-// require('./db') // DB Coonection
 let jwt = require('jsonwebtoken')
 require("dotenv").config(); //library call for using .env in node.js
 const path = require('path')
 
 
-// routes of sub directory files..................
-let userRoute = require('./routes/user')
-app.use("/userApi", userRoute);
 
 
 // Use body-parser middleware for Express.Routes to parse JSON and form data
