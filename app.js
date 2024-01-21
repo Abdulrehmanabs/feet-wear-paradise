@@ -80,7 +80,7 @@ app.post("/ordered_products", async (req, res) => {
 
 
 // pending page route
-app.delete("/get-pending-orders", async (req, res) => {
+app.get("/get-pending-orders", async (req, res) => {
     console.log(req.query);
     if (req.query) {
         res.json({ success: orders });
