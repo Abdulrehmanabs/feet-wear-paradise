@@ -33,8 +33,8 @@ let orders = [];
 
 // Client side request
 app.post("/create-user", async (req, res) => {
-    // console.log(req.body);
     users = [...users, req.body]
+    console.log(users);
     res.json({ success: 'You are Registered' })
 })
 
