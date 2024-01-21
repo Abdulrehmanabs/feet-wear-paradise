@@ -25,9 +25,11 @@ app.use(Express.urlencoded({ extended: true }))  // parse form data
 // and also required for publishing site
 app.use(Express.static(path.join(__dirname, 'build')))
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'))
-})
+app.use(Express.static('./build'));
+
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'build', 'index.html'))
+// })
 
 
 
@@ -93,6 +95,6 @@ app.get("/pending_orders", async (req, res) => {
 
 
 
-app.listen(process.env.port, function () {
+app.listen(process.env.port || 6080, function () {
     console.log('Server is listening at port = ' + process.env.port);
 });
