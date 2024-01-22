@@ -4,9 +4,9 @@
   "description": "feat wear website",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node  app.js",
+    "watch": "node --watch app.js",
+    "dev": "nodemon app.js"
   },
   "keywords": [
     "html",
