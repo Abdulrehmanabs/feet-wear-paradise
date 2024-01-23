@@ -2,10 +2,12 @@
 let Express = require('express');
 let app = Express();
 const cors = require("cors");
-let jwt = require('jsonwebtoken')
+let jwt = require('jsonwebtoken');
+require('./db'); // DB Coonection
+let { User, Order } = require('./modals/user');
 require("dotenv").config(); //library call for using .env in node.js
 
-const path = require('path')
+const path = require('path');
 
 
 
@@ -28,25 +30,30 @@ app.use(Express.static('./build'));
 
 
 // API's
-let users = [];
-let orders = [];
+
 
 // Client side request
 app.post("/create-user", async (req, res) => {
-    users = [...users, req.body]
-    console.log(users);
+
+    // console.log(req.body);
+    let newUser = new User(req.body)
+    await newUser.save()
+
+    console.log(newUser);
     res.json({ success: 'You are Registered' })
 })
 
 // log in with token
 app.post("/login-user", async (req, res) => {
-    let logUser = users.find((user) => user.email === req.body.email && user.password === req.body.password)
+    let logUser = await User.findOne({ email: req.body.email, password: req.body.password })
     console.log(logUser);
     if (logUser) {
         // generate token by jsonjwt library
         jwt.sign({ ...logUser }, 'Authenticated by ABS', { expiresIn: '1d' }, function (err, token) {
+            console.log({ logUser, token });
             res.json({ logUser, token });
         })
+
     } else {
         res.json({ success: 'User Not Found' }); // important for toast of error if user not found
     }
@@ -59,8 +66,8 @@ app.get("/user-token", async (req, res) => {
     if (req.query) {
         // Verify token by jsonjwt library
         jwt.verify(req.query.token, 'Authenticated by ABS', async function (error, tokenData) {
-            // console.log(tokenData);
-            let verifyedUser = users.find((user) => user.email === tokenData.email && user.password === tokenData.password)
+            console.log(tokenData);
+            let verifyedUser = await User.findOne({ email: tokenData._doc.email, password: tokenData._doc.password })
             res.json({ success: verifyedUser });
         })
     }
@@ -71,8 +78,9 @@ app.get("/user-token", async (req, res) => {
 app.post("/ordered_products", async (req, res) => {
 
     const { Orders } = req.body;
-    console.log(Orders);
-    orders = [...Orders, ...orders]
+    let newProduct = await Order.insertMany([...Orders])
+    // await newProduct.save()  // No need it any more
+    console.log(newProduct);
     res.json({ success: true })
 })
 
@@ -83,7 +91,8 @@ app.post("/ordered_products", async (req, res) => {
 app.get("/get-pending-orders", async (req, res) => {
     console.log(req.query);
     if (req.query) {
-        res.json({ success: orders });
+        let newProduct = await Order.find({})
+        res.json({ success: newProduct });
     }
 })
 
